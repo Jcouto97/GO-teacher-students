@@ -31,7 +31,11 @@ func main() {
 	subjectService := service.NewSubjectService(subjectRepo)
 	subjectHandler := handler.NewSubjectHandler(subjectService)
 
-	router := handler.SetupRouter(teacherHandler, studentHandler, subjectHandler)
+	enrollmentRepo := repository.NewEnrollmentRepository(db)
+	enrollmentService := service.NewEnrollmentService(enrollmentRepo, studentRepo, subjectRepo)
+	enrollmentHandler := handler.NewEnrollmentHandler(enrollmentService)
+
+	router := handler.SetupRouter(teacherHandler, studentHandler, subjectHandler, enrollmentHandler)
 
 	// start server
 	serverAddr := fmt.Sprintf(":%s", cfg.Server.Port)
